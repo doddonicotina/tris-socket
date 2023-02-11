@@ -45,6 +45,8 @@ public class server {
         InputStream in = socketClient.getInputStream();
         ObjectInputStream ois = new ObjectInputStream(in);
         matrice= (int[][]) ois.readObject();
+        System.out.println("matrice ricevuta..");
+
         ois.close();
     }
     public static int[][] convertiByteInMatrice(byte[] dati) throws IOException, ClassNotFoundException {
@@ -55,10 +57,11 @@ public class server {
         return matrice;
     }
     
-    public static void main (String[] args)
+    public static void main (String[] args) throws ClassNotFoundException, IOException
     {
         server s = new server();
         s.attendi();
+        s.comunica();
     }
 
 }

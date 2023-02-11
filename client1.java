@@ -7,9 +7,11 @@ public class client1{
     Socket socketClient = new Socket();
     static String id = "client1";
     static int [][] matrice;
-    ObjectOutputStream out = null;
+    DataOutputStream o;
+    DataInputStream i;
+    ObjectOutputStream oa = null;
 
-    DataInputStream in;
+    ObjectInputStream in;
     String mess;
 
     int port = 6969;
@@ -24,8 +26,8 @@ public class client1{
             System.out.println(id+":connessione riuscita");
 
 
-            in = new DataInputStream(socketClient.getInputStream());
-            out = new ObjectOutputStream(socketClient.getOutputStream());
+            in = new ObjectInputStream(socketClient.getInputStream());
+            oa = new ObjectOutputStream(socketClient.getOutputStream());
 
         }
         catch (UnknownHostException e)
@@ -44,10 +46,11 @@ public class client1{
         ObjectOutputStream oos = new ObjectOutputStream(out);
         oos.writeObject(matrice);
         oos.close();
-        socketClient.close();
-        System.out.println("invio byte al server..");
+        /*socketClient.close();*/
+        System.out.println("matrice inviata..");
         /* out.write(convertIntMatrixToByteArray(in.read(null)));
         System.out.println("invio riuscito");*/
+        socketClient.close();
 
 
 
@@ -64,13 +67,13 @@ public class client1{
         return buffer.array();
     }
     public static void main (String[] args) throws IOException
-    {
+    {/* 
         client1 client = new client1();
         client.connetti();
         interfaccia a = new interfaccia();
-        matrice = a.game(id);
-        client.comunica();
-        
+       /*matrice = a.game(id);
+       a.game(id);
+        */
     }
 }
 

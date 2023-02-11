@@ -1,5 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 import javax.swing.ImageIcon;
 
 import javax.swing.DefaultListModel;
@@ -17,8 +20,8 @@ public class interfaccia extends JFrame{
     static ImageIcon doddo = new ImageIcon ("doddo.png");
     static int [][] matrice = new int [3][3];
     static JButton[][] matriceb = new JButton[3][3];
+    client1 c = new client1();
 
-    static Boolean id=true; 
     static int[] coordinates ;
 
 
@@ -35,6 +38,46 @@ public class interfaccia extends JFrame{
                         frame.add(matriceb[a][b]);
                     }
                 }
+                for (int x=0; x<3;x++) {
+                    for (int y=0; y<3; y++) {
+                        int a = x;
+                        int b = y;
+                    matriceb[x][y].addActionListener(new ActionListener()
+                    {
+                        public void actionPerformed(ActionEvent e)
+                        {  
+                            if (true)
+                            {
+                                matriceb[a][b].setIcon(croce);
+                                matriceb[a][b].setText("");
+                                matrice[a][b]=1;
+                                client1 client = new client1();
+                                try{
+                                    client.connetti();
+                                    client.comunica();
+                                } catch (IOException ex){
+                                    System.out.println("Errore durante l'invio della matrice");
+                                }
+        
+        
+                            }
+                            else if (true)
+                            {
+                                matriceb[a][b].setText("");
+                                matriceb[a][b].setIcon(cerchio);
+                                matrice[a][b]=0;
+                            }           
+                            if (isThereaTris(matrice))
+                            {
+                                coordinates = whereIstheTris(matrice);
+                                matriceb[coordinates[0]][coordinates[1]].setIcon(doddo);
+                                matriceb[coordinates[2]][coordinates[3]].setIcon(doddo);
+                                matriceb[coordinates[4]][coordinates[5]].setIcon(doddo);
+                            }               
+                        } 
+                    });
+                    
+                    }
         frame.setVisible(true);
         frame.setSize(900,900); 
         frame.setLayout(new GridLayout(3,3));  
@@ -42,7 +85,17 @@ public class interfaccia extends JFrame{
     
 
     }
-    public int[][] game(String id)
+}
+    public void createClient(String id)
+    {
+        if (id=="Client1")
+        {
+        c.connetti();
+        
+        }
+    }/* 
+    /*public int[][] game(String id)
+    public void game(String id)
     {
        
         for (int x=0; x<3;x++) {
@@ -58,6 +111,15 @@ public class interfaccia extends JFrame{
                         matriceb[a][b].setIcon(croce);
                         matriceb[a][b].setText("");
                         matrice[a][b]=1;
+                        client1 client = new client1();
+                        try{
+                            client.connetti();
+                            client.comunica();
+                        } catch (IOException ex){
+                            System.out.println("Errore durante l'invio della matrice");
+                        }
+
+
                     }
                     else if (id=="client2")
                     {
@@ -77,9 +139,12 @@ public class interfaccia extends JFrame{
             
             }
 
-        }
+        }/* 
         return matrice;
-    }
+        
+    }*/
+
+    
 
     public void syncro ()
     {
@@ -118,6 +183,7 @@ public class interfaccia extends JFrame{
     }
 
     public static int[] whereIstheTris(int[][] matrice) {
+
         int[] coordinates = new int[6];
         // check rows
         for (int i = 0; i < 3; i++) {
@@ -168,4 +234,8 @@ public class interfaccia extends JFrame{
     
 
 }
+public static void main (String[] args) throws IOException
+    {
+        interfaccia a = new interfaccia();
+    }
 }
