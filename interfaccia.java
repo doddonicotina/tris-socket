@@ -1,17 +1,11 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.util.Scanner;
 
 import javax.swing.ImageIcon;
-
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JTextField;
 import javax.swing.plaf.InsetsUIResource;  
 
 public class interfaccia extends JFrame{
@@ -19,7 +13,10 @@ public class interfaccia extends JFrame{
     static ImageIcon cerchio = new ImageIcon ("cerchio.png");
     static ImageIcon doddo = new ImageIcon ("doddo.png");
     static int [][] matrice = new int [3][3];
+    static int [][] matricec1 = new int [3][3];
+    static int [][] matricec2 = new int [3][3];
     static JButton[][] matriceb = new JButton[3][3];
+    static int clientid;
     client1 c = new client1();
 
     static int[] coordinates ;
@@ -46,7 +43,7 @@ public class interfaccia extends JFrame{
                     {
                         public void actionPerformed(ActionEvent e)
                         {  
-                            if (true)
+                            if (clientid==1)
                             {
                                 matriceb[a][b].setIcon(croce);
                                 matriceb[a][b].setText("");
@@ -54,6 +51,8 @@ public class interfaccia extends JFrame{
                                 client1 client = new client1();
                                 try{
                                     client.connetti();
+                                    matricec1=client.ciuccia(matrice);
+                                    client.print();
                                     client.comunica();
                                 } catch (IOException ex){
                                     System.out.println("Errore durante l'invio della matrice");
@@ -61,11 +60,20 @@ public class interfaccia extends JFrame{
         
         
                             }
-                            else if (true)
+                            else if (clientid==2)
                             {
                                 matriceb[a][b].setText("");
                                 matriceb[a][b].setIcon(cerchio);
                                 matrice[a][b]=0;
+                                client1 client = new client1();
+                                try{
+                                    client.connetti();
+                                    matricec2=client.ciuccia(matrice);
+                                    client.print();
+                                    client.comunica();
+                                } catch (IOException ex){
+                                    System.out.println("Errore durante l'invio della matrice");
+                                }
                             }           
                             if (isThereaTris(matrice))
                             {
@@ -86,63 +94,7 @@ public class interfaccia extends JFrame{
 
     }
 }
-    public void createClient(String id)
-    {
-        if (id=="Client1")
-        {
-        c.connetti();
-        
-        }
-    }/* 
-    /*public int[][] game(String id)
-    public void game(String id)
-    {
-       
-        for (int x=0; x<3;x++) {
-        	for (int y=0; y<3; y++) {
-                int a = x;
-                int b = y;
-            matriceb[x][y].addActionListener(new ActionListener()
-            {
-                public void actionPerformed(ActionEvent e)
-                {  
-                    if (id=="client1")
-                    {
-                        matriceb[a][b].setIcon(croce);
-                        matriceb[a][b].setText("");
-                        matrice[a][b]=1;
-                        client1 client = new client1();
-                        try{
-                            client.connetti();
-                            client.comunica();
-                        } catch (IOException ex){
-                            System.out.println("Errore durante l'invio della matrice");
-                        }
 
-
-                    }
-                    else if (id=="client2")
-                    {
-                        matriceb[a][b].setText("");
-                        matriceb[a][b].setIcon(cerchio);
-                        matrice[a][b]=0;
-                    }           
-                    if (isThereaTris(matrice))
-                    {
-                        coordinates = whereIstheTris(matrice);
-                        matriceb[coordinates[0]][coordinates[1]].setIcon(doddo);
-                        matriceb[coordinates[2]][coordinates[3]].setIcon(doddo);
-                        matriceb[coordinates[4]][coordinates[5]].setIcon(doddo);
-                    }               
-                } 
-            });
-            
-            }
-
-        }/* 
-        return matrice;
-        
-    }*/
 
     
 
@@ -236,6 +188,9 @@ public class interfaccia extends JFrame{
 }
 public static void main (String[] args) throws IOException
     {
+        Scanner sc= new Scanner(System.in); 
+        clientid = sc.nextInt();
         interfaccia a = new interfaccia();
+        
     }
 }

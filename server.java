@@ -4,58 +4,49 @@ public class server {
     ServerSocket server = null;
     Socket socketClient = null;
     Socket socketClient2 = null;
-    DataOutputStream out;
- 
-    int [][] matrice;
-    ObjectInputStream in;
-    ObjectInputStream in1;
+    int [][] matrice = new int [3][3];
     int port = 6969;
-    int i = 0;
-
-    public Socket attendi()
+    public Socket attendi() throws IOException
     {
-        try
-        {
         System.out.println("inizializzo  server..");
         server = new ServerSocket(port); 
         System.out.println("server inizializzato su porta "+port);
         socketClient = server.accept();//mi metto in ascolto sulla porta
         System.out.println("connessione stabilita con client1");
+        
+   
+        return socketClient;
+    }
+    public Socket attendi2() throws IOException
+    {
         socketClient2 = server.accept();
         System.out.println("connessione stabilita con client2");
-        
-        i=+1;
-        
-
-
-        in = new ObjectInputStream(socketClient.getInputStream());
-        in1 = new ObjectInputStream(socketClient2.getInputStream());
-
-        
-        out = new DataOutputStream(socketClient.getOutputStream());
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
         return socketClient;
+   
     }
     public void comunica() throws IOException, ClassNotFoundException
     {
+        System.out.println("ci provo almeno");
+
         InputStream in = socketClient.getInputStream();
         ObjectInputStream ois = new ObjectInputStream(in);
+        OutputStream out = socketClient.getOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(out);
         matrice= (int[][]) ois.readObject();
         System.out.println("matrice ricevuta..");
-
-        ois.close();
+        print();
+        
+    
     }
-    public static int[][] convertiByteInMatrice(byte[] dati) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream bis = new ByteArrayInputStream(dati);
-        ObjectInputStream ois = new ObjectInputStream(bis);
-        int[][] matrice = (int[][]) ois.readObject();
-        ois.close();
-        return matrice;
+    public void print()
+{
+    for (int[] row : matrice) {
+        for (int value : row) {
+            System.out.print(value + " ");
+        }
+        System.out.println();
     }
+}
     
     public static void main (String[] args) throws ClassNotFoundException, IOException
     {
