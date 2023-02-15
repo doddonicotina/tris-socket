@@ -6,13 +6,9 @@ import java.nio.ByteBuffer;
 public class client1{
     Socket socketClient = new Socket();
     static String id = "client1";
-    static int [][] matrice;
-    DataOutputStream o;
-    DataInputStream i;
-    ObjectOutputStream oa = null;
-
-    ObjectInputStream in;
-    String mess;
+    static int [][] matrice = new int [3][3];
+    static OutputStream outputStream;
+    static ObjectOutputStream objectOutputStream;
 
     int port = 6969;
     BufferedReader keyboard;
@@ -25,9 +21,9 @@ public class client1{
             Socket socketClient = new Socket(InetAddress.getLocalHost(),port);
             System.out.println(id+":connessione riuscita");
 
+            outputStream = socketClient.getOutputStream();
+            objectOutputStream = new ObjectOutputStream(outputStream);
 
-            in = new ObjectInputStream(socketClient.getInputStream());
-            oa = new ObjectOutputStream(socketClient.getOutputStream());
 
         }
         catch (UnknownHostException e)
@@ -42,16 +38,19 @@ public class client1{
     }
     public void comunica() throws IOException
     {
-        OutputStream out = socketClient.getOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(out);
-        oos.writeObject(matrice);
-        oos.close();
-        /*socketClient.close();*/
+        objectOutputStream.writeObject(matrice);
         System.out.println("matrice inviata..");
-        /* out.write(convertIntMatrixToByteArray(in.read(null)));
-        System.out.println("invio riuscito");*/
-        socketClient.close();
 
+        /* 
+        OutputStream output = socketClient.getOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(output);
+        riempila();
+        out.writeObject(matrice);
+        out.close();
+        socketClient.close();
+        System.out.println("matrice inviata..");
+         out.write(convertIntMatrixToByteArray(in.read(null)));
+        System.out.print*/
 
 
     }
@@ -66,14 +65,22 @@ public class client1{
         }
         return buffer.array();
     }
+    public void riempila()
+    {
+        for (int i=0;i<3;i++){
+            for (int j=0;j<3;j++){
+                matrice[i][j]=1;
+            }
+        }
+        System.out.println("matrice riempita..");
+    }
     public static void main (String[] args) throws IOException
-    {/* 
+    { 
         client1 client = new client1();
         client.connetti();
-        interfaccia a = new interfaccia();
-       /*matrice = a.game(id);
-       a.game(id);
-        */
+       // interfaccia a = new interfaccia();
+       client.comunica();
+       
     }
 }
 

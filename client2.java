@@ -11,8 +11,6 @@ public class client2 {
     static int[][] matrice;
     ObjectOutputStream out = null;
 
-    diiocane oporco
-
     DataInputStream in;
     String mess;
 

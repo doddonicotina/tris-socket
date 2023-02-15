@@ -5,9 +5,10 @@ public class server {
     Socket socketClient = null;
     Socket socketClient2 = null;
     DataOutputStream out;
- 
-    int [][] matrice;
-    ObjectInputStream in;
+    InputStream inputStream;
+
+    int [][] matrice = new int [3][3];
+    ObjectInputStream objectInputStream;
     ObjectInputStream in1;
     int port = 6969;
     int i = 0;
@@ -21,14 +22,14 @@ public class server {
         System.out.println("server inizializzato su porta "+port);
         socketClient = server.accept();//mi metto in ascolto sulla porta
         System.out.println("connessione stabilita con client1");
-        socketClient2 = server.accept();
-        System.out.println("connessione stabilita con client2");
+       // socketClient2 = server.accept();
+       // System.out.println("connessione stabilita con client2");
         
         i=+1;
         
 
-
-        in = new ObjectInputStream(socketClient.getInputStream());
+        inputStream = socketClient.getInputStream();
+        objectInputStream = new ObjectInputStream(inputStream);
         in1 = new ObjectInputStream(socketClient2.getInputStream());
 
         
@@ -42,12 +43,18 @@ public class server {
     }
     public void comunica() throws IOException, ClassNotFoundException
     {
+        matrice = (int[][]) objectInputStream.readObject();
+        System.out.println("matrice ricevuta..");
+        printamela();
+        
+        /* 
         InputStream in = socketClient.getInputStream();
         ObjectInputStream ois = new ObjectInputStream(in);
         matrice= (int[][]) ois.readObject();
         System.out.println("matrice ricevuta..");
 
         ois.close();
+        */
     }
     public static int[][] convertiByteInMatrice(byte[] dati) throws IOException, ClassNotFoundException {
         ByteArrayInputStream bis = new ByteArrayInputStream(dati);
@@ -55,6 +62,17 @@ public class server {
         int[][] matrice = (int[][]) ois.readObject();
         ois.close();
         return matrice;
+    }
+    public void printamela()
+    {
+        for (int i=0;i<3;i++){
+            for (int j=0;j<3;j++){
+        System.out.println(matrice[i][j]);
+
+
+            }
+        }
+
     }
     
     public static void main (String[] args) throws ClassNotFoundException, IOException
